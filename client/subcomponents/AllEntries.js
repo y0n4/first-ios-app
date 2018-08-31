@@ -13,6 +13,7 @@ export default class App extends React.Component {
     return (
       <View>
         <Text style={{textAlign: 'center'}}>*your past journal entries here*</Text>
+        <Text style={{textAlign: 'center'}}>currently in firebase branch</Text>
       </View>
     )
   }
