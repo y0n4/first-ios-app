@@ -10,3 +10,13 @@ const firebaseConfig = {
   messagingSenderId: "898624680174"
 };
 firebase.initializeApp(firebaseConfig);
+
+//stores journal entry and date
+exports.storeEntry = function(data) {
+  firebase.database().ref('/entry').set({
+    time: data.date,
+    entry1: data.entry1,
+    entry2: data.entry2,
+    entry3: data.entry3
+  });
+}
