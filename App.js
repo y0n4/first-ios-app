@@ -9,11 +9,13 @@ import {
 } from 'react-native';
 import AfterSubmit from './client/subcomponents/AfterSubmit';
 import AllEntries from './client/subcomponents/AllEntries';
+import firebase from './database/firebase.js';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      // name: '',
       hasSubmit: false,
       form1: '',
       form2: '',
@@ -23,9 +25,17 @@ export default class App extends React.Component {
     this.entryJournal = this.entryJournal.bind(this);
   }
 
-  //this func is when submit button is clicked, gonna send the gratitude journal entry to server side
+  //this func is when submit button is clicked, save the entries to database
   submitJournal() {
-    console.log(this.state.form1, this.state.form2, this.state.form3, new Date());
+    var data = {
+      date: new Date().toDateString(),
+      entry1: this.state.form1,
+      entry2: this.state.form2,
+      entry3: this.state.form3
+    }
+
+    firebase.storeEntry(data);
+
     this.setState({
       hasSubmit: true,
       form1: '',
@@ -33,9 +43,9 @@ export default class App extends React.Component {
       form3: '',
     });
     //clears the input for each input
-    this._textInput1.setNativeProps({ text: ' ' });
-    this._textInput2.setNativeProps({ text: ' ' });
-    this._textInput3.setNativeProps({ text: ' ' });
+    // this._textInput1.setNativeProps({ text: ' ' });
+    // this._textInput2.setNativeProps({ text: ' ' });
+    // this._textInput3.setNativeProps({ text: ' ' });
   }
 
   entryJournal() {
