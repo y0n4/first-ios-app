@@ -5,7 +5,8 @@ import {
   TextInput,
   View,
   Image,
-  Button
+  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import AfterSubmit from './client/subcomponents/AfterSubmit';
 import AllEntries from './client/subcomponents/AllEntries';
@@ -20,7 +21,13 @@ export default class App extends React.Component {
       form1: '',
       form2: '',
       form3: '',
-      retrievedInfo: 'nothing atm',
+      allEntries: [],
+      entrySample: [{
+        entry1: 'Thai curry',
+        entry2: 'Making it 2 milkbbi sample',
+        entry3: 'The warm weather',
+        time: 'Fri Aug 31 2018'
+      }]
     };
     this.submitJournal = this.submitJournal.bind(this);
     this.entryJournal = this.entryJournal.bind(this);
@@ -30,14 +37,14 @@ export default class App extends React.Component {
     //retrieve all entries from database
     var retrieved;
     var entries = [];
-    firebase.allEntry((data) => {
-      console.log(data.entry);
+    firebase.retrieveEntries((data) => {
+      // console.log(data.entry);
       retrieved = data.entry;
       for(var key in retrieved) {
         entries.push(retrieved[key])
       }
-      console.log(entries);
-      this.setState({retrievedInfo: entries});
+      // console.log(entries);
+      this.setState({allEntries: entries});
     });
   }
 
@@ -64,50 +71,64 @@ export default class App extends React.Component {
     this._textInput3.setNativeProps({ text: ' ' });
   }
 
+  //contains entry form component
   entryJournal() {
     return (
       <View>
         <View style={{alignItems: 'center'}}>
         <Text style={{margin: 2, padding: 10}}>
-          What are 3 things that you are grateful for today?
+          What are 3 things that you are grateful for today? It can be anything!
         </Text>
-      </View>
-      <View style={{padding: 10}}>
-        <TextInput
-          style={styles.inputform}
-          placeholder='1' 
-          ref={component => this._textInput1 = component}
-          onChangeText={(text) => this.setState({form1: text})}
-          value={this.state.text}
-        />
-        <TextInput 
-          placeholder='2'
-          ref={component => this._textInput2 = component}
-          style={styles.inputform}
-          onChangeText={(text) => this.setState({form2: text})}
-          value={this.state.text}
-        />
-        <TextInput 
-          placeholder='3' 
-          ref={component => this._textInput3 = component}
-          style={styles.inputform}
-          onChangeText={(text) => this.setState({form3: text})}
-          value={this.state.text}
-        />
         </View>
-        
-        <Button
-          onPress={this.submitJournal}
-          title="Submit"
-        />
+        <View style={{padding: 10}}>
+          <TextInput
+            style={styles.inputform}
+            placeholder='1' 
+            ref={component => this._textInput1 = component}
+            onChangeText={(text) => this.setState({form1: text})}
+            value={this.state.text}
+          />
+          <TextInput 
+            placeholder='2'
+            ref={component => this._textInput2 = component}
+            style={styles.inputform}
+            onChangeText={(text) => this.setState({form2: text})}
+            value={this.state.text}
+          />
+          <TextInput 
+            placeholder='3' 
+            ref={component => this._textInput3 = component}
+            style={styles.inputform}
+            onChangeText={(text) => this.setState({form3: text})}
+            value={this.state.text}
+          />
+          
+          {/* <Button
+            color="#841584"
+            onPress={this.submitJournal}
+            title="Submit"
+          /> */}
+
+          {/* <View> */}
+            <TouchableOpacity
+              style={styles.button}
+              onPress={this.submitJournal}
+            >
+              <Text style={{color: 'white', fontWeight: 'bold'}}>Submit</Text>
+            </TouchableOpacity>
+          {/* </View> */}
+        </View>
       </View>
     );
   };
 
   allJournal() {
+    console.log(this.state.allEntries);
     return (
-      // <AllEntries data={this.state.retrievedInfo} />
       <View>
+        {this.state.entrySample.map((journal, index) => 
+          <AllEntries key={index} data={journal} />
+        )}
       </View>
     )
   }
@@ -118,13 +139,16 @@ export default class App extends React.Component {
     };
 
     return (
-      <View style={styles.container}>
-        <Image source={pic} style={{width: 200, height: 200}}/>
-        {/* {!this.state.hasSubmit ? this.entryJournal() : <AfterSubmit />} */}
-        {this.entryJournal()}
-        <View style={{margin: 10}} />
-        {this.allJournal()}
-      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <Image source={pic} style={{width: 200, height: 200}}/>
+          {!this.state.hasSubmit ? this.entryJournal() : <AfterSubmit />}
+          {/* {this.entryJournal()} */}
+          <View style={{margin: 5}} />
+          <Text>🌸 Gratitude journal 🌸</Text>
+          {this.allJournal()}
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -137,8 +161,19 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   inputform: {
-    margin: 5,
-    borderColor: 'black',
-    borderWidth: 1,
+    margin: 2,
+    padding: 5,
+    backgroundColor: '#FFF6F9',
+    borderColor: '#FFCFE0',
+    borderWidth: 2,
   },
+  button: {
+    margin: 2,
+    padding: 5,
+    backgroundColor: '#FFCFE0',
+    borderColor: '#FFCFE0',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    alignItems: 'center',
+  }
 });
