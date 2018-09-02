@@ -25,7 +25,7 @@ exports.storeEntry = function(data, cb) {
   });
 }
 
-exports.allEntry = function(callback) {
+exports.retrieveEntries = function(callback) {
   firebase.database().ref().on('value', (snapshot) => {
     // console.log(snapshot.val());
     callback(snapshot.val());
