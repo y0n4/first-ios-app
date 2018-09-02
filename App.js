@@ -20,9 +20,24 @@ export default class App extends React.Component {
       form1: '',
       form2: '',
       form3: '',
+      retrievedInfo: 'nothing atm',
     };
     this.submitJournal = this.submitJournal.bind(this);
     this.entryJournal = this.entryJournal.bind(this);
+  }
+
+  componentDidMount() {
+    //retrieve all entries from database
+    var retrieved;
+    firebase.allEntry((data) => {
+      // console.log('data is this!!', data);
+      var retrieved = data;
+      console.log('new data!!!!!', retrieved);
+      this.setState({retrievedInfo: retrieved});
+
+      console.log('LINE FREAAKING 39', this.state.retrievedInfo);
+
+    });
   }
 
   //this func is when submit button is clicked, save the entries to database
@@ -42,10 +57,10 @@ export default class App extends React.Component {
       form2: '',
       form3: '',
     });
-    //clears the input for each input
-    // this._textInput1.setNativeProps({ text: ' ' });
-    // this._textInput2.setNativeProps({ text: ' ' });
-    // this._textInput3.setNativeProps({ text: ' ' });
+    // clears the input for each input
+    this._textInput1.setNativeProps({ text: ' ' });
+    this._textInput2.setNativeProps({ text: ' ' });
+    this._textInput3.setNativeProps({ text: ' ' });
   }
 
   entryJournal() {
@@ -104,9 +119,10 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <Image source={pic} style={{width: 200, height: 200}}/>
-        {!this.state.hasSubmit ? this.entryJournal() : <AfterSubmit />}
+        {/* {!this.state.hasSubmit ? this.entryJournal() : <AfterSubmit />} */}
+        {this.entryJournal()}
         <View style={{margin: 10}} />
-        <AllEntries />
+        <AllEntries data={this.state.retrievedInfo} />
       </View>
     );
   }
