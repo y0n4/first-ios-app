@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 export default function AllEntries(props) {
-  console.log('props', props);
+  console.log('this is PROPS', props.data);
   return (
     <View>
       <Text style={{textAlign: 'center'}}>*your past journal entries here*</Text>
