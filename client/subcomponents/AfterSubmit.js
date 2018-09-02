@@ -11,7 +11,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Thank you for today's submission. I'll see you tomorrow!</Text>
+        <Text>Thank you for today's submission. I better see you tomorrow!</Text>
       </View>
     );
   }
@@ -20,7 +20,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    alignItems: 'center',
+    alignItems: 'center'
     // justifyContent: 'center',
   }
 });
