@@ -29,14 +29,15 @@ export default class App extends React.Component {
   componentDidMount() {
     //retrieve all entries from database
     var retrieved;
+    var entries = [];
     firebase.allEntry((data) => {
-      // console.log('data is this!!', data);
-      var retrieved = data;
-      console.log('new data!!!!!', retrieved);
-      this.setState({retrievedInfo: retrieved});
-
-      console.log('LINE FREAAKING 39', this.state.retrievedInfo);
-
+      console.log(data.entry);
+      retrieved = data.entry;
+      for(var key in retrieved) {
+        entries.push(retrieved[key])
+      }
+      console.log(entries);
+      this.setState({retrievedInfo: entries});
     });
   }
 
@@ -105,8 +106,8 @@ export default class App extends React.Component {
 
   allJournal() {
     return (
+      // <AllEntries data={this.state.retrievedInfo} />
       <View>
-        <TextInput style={{textAlign: 'center'}}>*your past journal entries here*</TextInput>
       </View>
     )
   }
@@ -122,7 +123,7 @@ export default class App extends React.Component {
         {/* {!this.state.hasSubmit ? this.entryJournal() : <AfterSubmit />} */}
         {this.entryJournal()}
         <View style={{margin: 10}} />
-        <AllEntries data={this.state.retrievedInfo} />
+        {this.allJournal()}
       </View>
     );
   }
