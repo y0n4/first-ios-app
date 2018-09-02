@@ -12,11 +12,24 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 //stores journal entry and date
-exports.storeEntry = function(data) {
-  firebase.database().ref('/entry').set({
+exports.storeEntry = function(data, cb) {
+  firebase.database().ref('entry/').push({
     time: data.date,
     entry1: data.entry1,
     entry2: data.entry2,
     entry3: data.entry3
+  }).then((res) => {
+    console.log('entry is saved!');
+  }).catch((err) => {
+    console.log('err');
+  });
+}
+
+exports.allEntry = function(callback) {
+  firebase.database().ref().on('value', (snapshot) => {
+    // console.log(snapshot.val());
+    callback(snapshot.val());
+  }, (err) => {
+    console.log(err);
   });
 }
