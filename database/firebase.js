@@ -11,10 +11,10 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-//stores journal entry and date
+//stores journal entry and time
 exports.storeEntry = function(data, cb) {
   firebase.database().ref('entry/').push({
-    time: data.date,
+    time: data.time,
     entry1: data.entry1,
     entry2: data.entry2,
     entry3: data.entry3
@@ -26,8 +26,8 @@ exports.storeEntry = function(data, cb) {
 }
 
 exports.retrieveEntries = function(callback) {
-  firebase.database().ref().on('value', (snapshot) => {
-    // console.log(snapshot.val());
+  firebase.database().ref('entry/').once('value').then((snapshot) => {
+    console.log(snapshot);
     callback(snapshot.val());
   }, (err) => {
     console.log(err);
