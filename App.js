@@ -38,8 +38,8 @@ export default class App extends React.Component {
     var retrieved;
     var entries = [];
     firebase.retrieveEntries((data) => {
-      // console.log(data.entry);
-      retrieved = data.entry;
+      console.log('data is', data);
+      retrieved = data;
       for(var key in retrieved) {
         entries.push(retrieved[key])
       }
@@ -51,11 +51,13 @@ export default class App extends React.Component {
   //this func is when submit button is clicked, save the entries to database
   submitJournal() {
     var data = {
-      date: new Date().toDateString(),
+      time: new Date().toDateString(),
       entry1: this.state.form1,
       entry2: this.state.form2,
       entry3: this.state.form3
     }
+    console.log(data);
+    this.state.allEntries.push(data);
 
     firebase.storeEntry(data);
 
@@ -65,6 +67,8 @@ export default class App extends React.Component {
       form2: '',
       form3: '',
     });
+
+    console.log(this.state.allEntries);
     // clears the input for each input
     this._textInput1.setNativeProps({ text: ' ' });
     this._textInput2.setNativeProps({ text: ' ' });
@@ -80,6 +84,7 @@ export default class App extends React.Component {
           What are 3 things that you are grateful for today? It can be anything!
         </Text>
         </View>
+
         <View style={{padding: 10}}>
           <TextInput
             style={styles.inputform}
@@ -102,31 +107,22 @@ export default class App extends React.Component {
             onChangeText={(text) => this.setState({form3: text})}
             value={this.state.text}
           />
-          
-          {/* <Button
-            color="#841584"
+          <TouchableOpacity
+            style={styles.button}
             onPress={this.submitJournal}
-            title="Submit"
-          /> */}
-
-          {/* <View> */}
-            <TouchableOpacity
-              style={styles.button}
-              onPress={this.submitJournal}
-            >
-              <Text style={{color: 'white', fontWeight: 'bold'}}>Submit</Text>
-            </TouchableOpacity>
-          {/* </View> */}
+          >
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>Submit</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
   };
 
   allJournal() {
-    console.log(this.state.allEntries);
+    // console.log(this.state.allEntries);
     return (
-      <View>
-        {this.state.entrySample.map((journal, index) => 
+      <View style={{padding: 10}}>
+        {this.state.allEntries.map((journal, index) => 
           <AllEntries key={index} data={journal} />
         )}
       </View>
@@ -146,8 +142,8 @@ export default class App extends React.Component {
           {/* {this.entryJournal()} */}
           <View style={{margin: 5}} />
           <Text>🌸 Gratitude journal 🌸</Text>
-          {this.allJournal()}
         </View>
+        {this.allJournal()}
       </ScrollView>
     );
   }
